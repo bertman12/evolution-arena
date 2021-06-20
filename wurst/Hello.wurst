@@ -1,0 +1,59 @@
+package Hello
+import HashMap
+import HashList
+/* Hello and welcome to Wurst!
+This is just a demo package. 
+You can modify it to tests things out 
+and then later delete it and create your own, new packages.
+Enjoy WurstScript? Consider starring our repo https://github.com/wurstscript/WurstScript */ 
+constant real x = 5
+int array a = [1,2]
+int y = 3
+string name = "bart"
+unit array friendly = []
+var rag = 5 < 0 ? 10 : 5
+player array allies = [GetLocalPlayer()]
+int array myArray = [1,2,3,4,5,6,7,8,9]
+let myNumbers = new IterableMap<int, int>
+
+function getLength()
+	skip
+	// let total = 0
+	// //no iterator provided by player array
+	// // for int i in allies
+	// // 	i++
+	// // 	print(i)
+		
+	// // return total.toString()
+let playerLibrary = new HashList<HashMap<int, HashList<HashMap<int, int>>>>
+//data structure	   hashlist is a set of hashmaps of all player data
+//					hashmap: is a set of hashlists you get with key of playerID, value is a in a hashlist with specific data of the player
+//																	hashlist could be a hashmap about the player's units and those units costs
+let playerHashMap = new HashMap<int, HashList<HashMap<int,int>>>
+let playerUnitGroup = new HashList<HashMap<int, int>>
+let unitCost = new HashMap<int, int>
+
+init
+	print("Hello World")
+
+	unitCost.put(0, 1)
+	playerUnitGroup.add(unitCost)
+	playerHashMap.put(0, playerUnitGroup)
+	playerLibrary.add(playerHashMap)
+
+	// for i = 0 to 20
+	// 	myNumbers.put(i, i*2)
+	
+	// print("Here is my iterable map")	
+	
+	// for i = 0 to myNumbers.size() - 1	
+	// 	print(myNumbers.get(i).toString())
+	// 	Log.info(myNumbers.get(i).toString())
+
+		// print("Here is my array")
+
+	// for i = 0 to 8
+	// 	print(myArray[i].toString())
+	
+	
+	

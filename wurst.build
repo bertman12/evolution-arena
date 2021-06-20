@@ -1,0 +1,6 @@
+---
+projectName: evolution_arena
+buildMapData:
+  name: MyMapName
+  fileName: MyMapFile
+  author: eddyd
