@@ -1,0 +1,45 @@
+package InitializeMap
+import UnitIds
+//allows referencing UnitIds to get a premade unit id ex: UnitIds.paladin, we are able to call the class UnitIds 
+//and use its constants because they are static which means they don't need a class isntance to be accessed
+
+/*
+* Create starting units for each player
+* Store players in a datastructure
+* Print player names
+* 
+*
+*/
+
+//VARIABLES
+int totalDeaths = 3
+let hostId = GetLocalPlayer()
+let state = ifWinner()
+let condition = getGameState(state)
+let startingUnitId = UnitIds.airbarge
+constant mapCenter = vec2(0,0)
+
+//custom tuple data structure about player attributes
+tuple generalUserInfo(player playerId, string condition, boolean winCondition, int startUnitId, real xPos, real yPos, real angle)  //custom data structure, type strict, and similar to accessing properties of an object
+var player1 = generalUserInfo(hostId,condition,state, startingUnitId, mapCenter.x, mapCenter.y, 0)
+var player2 = player1 //initialized as player1 data, will be changed later
+
+function redefineMyTuple()  
+    player2.playerId = GetLocalPlayer()
+    player2.condition = "winner"
+    player2.winCondition = true
+    player2.startUnitId = UnitIds.akama
+    player2.xPos = mapCenter.x
+    player2.yPos = mapCenter.y
+    player2.angle = 0
+    
+//some practice functions
+function ifWinner() returns boolean
+    return totalDeaths < 5 ? true : false  
+function getGameState(boolean state) returns string 
+    return state ? "winner" : "loser"
+
+init
+    //now making use of the tuple data about the player to create the start units
+    CreateUnit(player1.playerId, player1.startUnitId, player1.xPos, player1.yPos, player1.angle)
+
