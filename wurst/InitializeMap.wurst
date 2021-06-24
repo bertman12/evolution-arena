@@ -4,6 +4,7 @@ import TerrainUtils
 import Assets
 import OrderIds
 import StandardTextTags
+import BitSet
 //allows referencing UnitIds to get a premade unit id ex: UnitIds.paladin, we are able to call the class UnitIds 
 //and use its constants because they are static which means they don't need a class isntance to be accessed
 
@@ -24,13 +25,13 @@ let startingUnitId = UnitIds.alchemist
 constant mapCenter = vec2(0,0)
 
 //custom tuple data structure about player attributes
-tuple generalUserInfo(player playerId, string condition, boolean winCondition, int startUnitId, real xPos, real yPos, real angle)  //custom data structure, type strict, and similar to accessing properties of an object
+tuple generalUserInfo(player playerRep, string condition, boolean winCondition, int startUnitId, real xPos, real yPos, real angle)  //custom data structure, type strict, and similar to accessing properties of an object
 var player1 = generalUserInfo(hostId,condition,state, startingUnitId, mapCenter.x, mapCenter.y, 0)
 var player2 = player1 //initialized as player1 data, will be changed later
 
 //some practice functions
 function redefineMyTuple()  
-    player2.playerId = GetLocalPlayer()
+    player2.playerRep = GetLocalPlayer()
     player2.condition = "winner"
     player2.winCondition = true
     player2.startUnitId = UnitIds.akama
@@ -48,13 +49,30 @@ function getGameState(boolean state) returns string
 //then create a unit for each player
 var myText = standardTextTag(vec2(-250, -250), "GODLIKE")..setColor(255, 0, 0, 0)..setPermanent(true)..setVelocity(vec2(0,0))
 
+//each power of 2 will handle if the player is playing. its 1 or 0. Here we start with an empty bitset
+let playerStates = bitset(1)
+
+
+
+
+
+//if a player is playing pick integer to represent that; ex: only 1 person playing, then set the bitset to 1
+
 
 init
     //now making use of the tuple data about the player to create the start units
-    let mainHero = CreateUnit(player1.playerId, player1.startUnitId, player1.xPos, player1.yPos, player1.angle)
+    let mainHero = CreateUnit(player1.playerRep, player1.startUnitId, player1.xPos, player1.yPos, player1.angle)
                                                                                                 
     mainHero..issuePointOrderById(OrderIds.move, vec2(500, 500))
             ..setMoveSpeedPercChange(5)
             
     mapCenter.addTerrainHeight(100)
     createCriticalStrikeTextTag(mainHero, 5000)
+    playerStates..set(1, true)..set(0)..set(2)
+    if hostId.isIngame()
+        print("PLayer is playing")
+    else if playerStates.get(1) == false
+        print("The bitset is false at index 1")
+    else
+        print("The conditions checked are wrong!")
+    
