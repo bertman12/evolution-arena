@@ -1,5 +1,9 @@
 package InitializeMap
 import UnitIds
+import TerrainUtils
+import Assets
+import OrderIds
+import StandardTextTags
 //allows referencing UnitIds to get a premade unit id ex: UnitIds.paladin, we are able to call the class UnitIds 
 //and use its constants because they are static which means they don't need a class isntance to be accessed
 
@@ -16,7 +20,7 @@ int totalDeaths = 3
 let hostId = GetLocalPlayer()
 let state = ifWinner()
 let condition = getGameState(state)
-let startingUnitId = UnitIds.airbarge
+let startingUnitId = UnitIds.alchemist
 constant mapCenter = vec2(0,0)
 
 //custom tuple data structure about player attributes
@@ -24,6 +28,7 @@ tuple generalUserInfo(player playerId, string condition, boolean winCondition, i
 var player1 = generalUserInfo(hostId,condition,state, startingUnitId, mapCenter.x, mapCenter.y, 0)
 var player2 = player1 //initialized as player1 data, will be changed later
 
+//some practice functions
 function redefineMyTuple()  
     player2.playerId = GetLocalPlayer()
     player2.condition = "winner"
@@ -32,14 +37,24 @@ function redefineMyTuple()
     player2.xPos = mapCenter.x
     player2.yPos = mapCenter.y
     player2.angle = 0
-    
-//some practice functions
+
 function ifWinner() returns boolean
     return totalDeaths < 5 ? true : false  
+
 function getGameState(boolean state) returns string 
     return state ? "winner" : "loser"
 
+//make a function to get the number of players playing and assign to an integer
+//then create a unit for each player
+var myText = standardTextTag(vec2(-250, -250), "GODLIKE")..setColor(255, 0, 0, 0)..setPermanent(true)..setVelocity(vec2(0,0))
+
+
 init
     //now making use of the tuple data about the player to create the start units
-    CreateUnit(player1.playerId, player1.startUnitId, player1.xPos, player1.yPos, player1.angle)
-
+    let mainHero = CreateUnit(player1.playerId, player1.startUnitId, player1.xPos, player1.yPos, player1.angle)
+                                                                                                
+    mainHero..issuePointOrderById(OrderIds.move, vec2(500, 500))
+            ..setMoveSpeedPercChange(5)
+            
+    mapCenter.addTerrainHeight(100)
+    createCriticalStrikeTextTag(mainHero, 5000)
